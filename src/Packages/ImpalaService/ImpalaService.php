@@ -1585,8 +1585,7 @@ class ImpalaService_GetExecSummary_result {
       {
         case 0:
           if ($ftype == TType::STRUCT) {
-            $this->success = new \ThriftSQL\TExecSummary();
-            $xfer += $this->success->read($input);
+            $this->success = null;
           } else {
             $xfer += $input->skip($ftype);
           }

@@ -663,8 +663,7 @@ class ResultsMetadata {
       {
         case 1:
           if ($ftype == TType::STRUCT) {
-            $this->schema = new \ThriftSQL\metastore\Schema();
-            $xfer += $this->schema->read($input);
+            $this->schema = null;
           } else {
             $xfer += $input->skip($ftype);
           }

@@ -539,8 +539,7 @@ class TGetExecSummaryResp {
           break;
         case 2:
           if ($ftype == TType::STRUCT) {
-            $this->summary = new \ThriftSQL\TExecSummary();
-            $xfer += $this->summary->read($input);
+            $this->summary = null;
           } else {
             $xfer += $input->skip($ftype);
           }

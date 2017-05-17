@@ -8,6 +8,7 @@ namespace Thrift\Transport;
 use Thrift\Transport\TTransport;
 use Thrift\Exception\TTransportException;
 use Thrift\Factory\TStringFuncFactory;
+use ThriftSQL\Exception;
 
 /**
  * TTransport that wraps another TTransport and provides SASL.
@@ -110,7 +111,7 @@ class TSaslClientTransport extends TTransport {
       }
     } catch ( TTransportException $e ) {
       throw $e;
-    } catch ( Exception $e ) {
+    } catch ( \Exception $e ) {
       throw new TTransportException( 'SASL Auth failed: ',  $e->getMessage() );
     }
 

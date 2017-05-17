@@ -1,0 +1,76 @@
+<?xml version="1.0"?>
+<!--
+ impala client build script.
+
+ license http://www.tuenti.com This file can only be stored on servers belonging to Tuenti Technologies S.L.
+
+ copyright 2017
+ (c) Tuenti Technologies S.L.
+ author Goran Petrovic <gpetrovic@tuenti.com>
+ author Jesús Bravo Álvarez <suso@tuenti.com>
+ author José Antonio Pérez Sánchez <japerez@tuenti.com>
+ package Build
+ subpackage impala-php-client
+-->
+<project name="impala-php-client" default="build" basedir=".">
+	<description>
+		Produce a build of Impala Thrift library.
+	</description>
+
+	<!-- Define supernanny fetch task -->
+	<taskdef name="supernanny-fetch"
+			 classname="com.tuenti.supernanny.ant.SuperNannyResolve"
+			 classpath="/usr/share/java/lib/supernanny.jar"/>
+
+	<!-- set global properties for this build -->
+	<property name="root" location="." />
+	<property name="build-utils" location="${root}/lib/build-utils" />
+	<property name="profile" value="default" />
+
+	<!-- We need to fetch build dependencies before anything else, otherwise we couldn't load build modules.
+		Pass skipcleanup flag to supernanny call, to avoid deleting all dependencies not present in dep files
+		after fetching
+	-->
+	<supernanny-fetch root="${root}" depfile="${root}/lib/DEP.override,${root}/.DEP.build" skipcleanup="true" />
+
+	<!--***************************************
+		Build related targets and properties
+	****************************************-->
+
+	<!-- Load common properties -->
+	<property file="${build-utils}/common/build.properties"/>
+
+	<!-- Include needed definitions -->
+	<import file="${build-utils}/common/build.xml"/>
+
+	<!-- filesets definitions -->
+	<fileset dir="${root}/src" id="files.src.php">
+		<include name="**/*.php"/>
+	</fileset>
+
+	<!-- ACTUAL BUILD: in xsessions-client we only need build-library -->
+	<target name="build" depends="build-library" />
+
+	<!-- Build library code, to publish xsessions-client as a library.
+		This target needs to be redefined to use build-library -->
+	<target name="-build-library-code" depends="-build-src" />
+
+	<!-- Build all source code -->
+	<target name="-build-src">
+		<copy todir="${build}">
+			<fileset refid="files.src.php" />
+		</copy>
+	</target>
+	<!-- ACTUAL BUILD ENDS HERE -->
+
+	<!--*****************************************
+		Testing related targets and properties
+	******************************************-->
+
+	<!-- Make sure deps are fetched -->
+	<available property="tfw.available" file="${root}/${dir.deps}/${dir.dep.tfw-lib}" />
+	<supernanny-fetch skip="${tfw.available}" root="${root}" depFile="${root}/lib/DEP.override,~/.supernanny,${root}/.DEP" skipcleanup="true"/>
+
+  <!-- Import testing definitions -->
+  <import file="${test.definitions}" />
+</project>

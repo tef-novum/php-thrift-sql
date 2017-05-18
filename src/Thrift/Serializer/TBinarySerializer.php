@@ -46,6 +46,9 @@ class TBinarySerializer {
                                    TMessageType::REPLY, $object,
                                    0, $protocol->isStrictWrite());
 
+      $unused_name = null;
+      $unused_type = null;
+      $unused_seqid = null;
       $protocol->readMessageBegin($unused_name, $unused_type,
                                   $unused_seqid);
     } else {

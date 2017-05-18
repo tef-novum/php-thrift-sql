@@ -187,10 +187,11 @@ class TSocketPool extends TSocket {
     for ($i = 0; $i < $numServers; ++$i) {
 
       // This extracts the $host and $port variables
-      extract($this->servers_[$i]);
+      $host = $this->servers_[$i]['host'];
+      $port = $this->servers_[$i]['port'];
 
       // Check APC cache for a record of this server being down
-      $failtimeKey = false;
+      $failtimeKey = 'thrift_failtime:'.$host.':'.$port.'~';
 
       // Cache miss? Assume it's OK
       $lastFailtime = apc_fetch($failtimeKey);

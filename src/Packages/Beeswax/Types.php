@@ -582,7 +582,6 @@ class ResultsMetadata {
   /**
    * The schema of the results
    *
-   * @var \ThriftSQL\metastore\Schema
    */
   public $schema = null;
   /**

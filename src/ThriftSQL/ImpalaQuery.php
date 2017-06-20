@@ -87,35 +87,39 @@ class ImpalaQuery implements \ThriftSQLQuery {
       $values = explode( "\t", $rawValues, count( $response->columns ) );
 
       foreach ( $response->columns as $col => $dataType ) {
-        switch ($dataType) {
-          case 'int':
-          case 'bigint':
-          case 'smallint':
-          case 'tinyint':
-            $result[ $row ][ $col ] = intval( $values[ $col ] );
-            break;
+        if ($values[$col] === 'NULL') {
+          $result[$row][$col] = 'NULL';
+        } else {
+          switch ($dataType) {
+            case 'int':
+            case 'bigint':
+            case 'smallint':
+            case 'tinyint':
+              $result[$row][$col] = intval($values[$col]);
+              break;
 
-          case 'decimal':
-          case 'double':
-          case 'float':
-          case 'real':
-            $result[ $row ][ $col ] = floatval( $values[ $col ] );
-            break;
+            case 'decimal':
+            case 'double':
+            case 'float':
+            case 'real':
+              $result[$row][$col] = floatval($values[$col]);
+              break;
 
-          case 'boolean':
-            $result[ $row ][ $col ] = ( 'true' === $values[ $col ] );
-            break;
+            case 'boolean':
+              $result[$row][$col] = ('true' === $values[$col]);
+               break;
 
-          case 'char':
-          case 'string':
-          case 'varchar':
-          case 'timestamp':
-          default:
-            $result[ $row ][ $col ] = $values[ $col ];
-            break;
+            case 'char':
+            case 'string':
+            case 'varchar':
+            case 'timestamp':
+            default:
+              $result[$row][$col] = $values[$col];
+              break;
+            }
+          }
         }
-      }
-    }
+     }
     return $result;
   }
 
